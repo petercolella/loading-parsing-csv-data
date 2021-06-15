@@ -11,6 +11,7 @@ const styles = {
 
 const FetchContainer = () => {
   const [data, setData] = useState("");
+  const [data2, setData2] = useState("");
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -34,6 +35,13 @@ ${data.columns.length} columns`;
 
     fetchTextAsync(csvUrl);
 
+    d3.csv(csvUrl).then((data) => {
+      let message = `${(d3.csvFormat(data).length / 1024).toFixed(2)} kB
+${data.length} rows
+${data.columns.length} columns`;
+      setData2(message);
+    });
+
     return () => {
       abortController.abort();
     };
@@ -43,6 +51,7 @@ ${data.columns.length} columns`;
     <div style={{ margin: 20 }}>
       <h1>Our data details:</h1>
       <pre style={styles.pre}>{data ? data : "Waiting for data..."}</pre>
+      <pre style={styles.pre}>{data2 ? data2 : "Waiting for data..."}</pre>
     </div>
   );
 };
